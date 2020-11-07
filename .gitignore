@@ -1,0 +1,20 @@
+# phpstorm project files
+.idea
+.env
+.bundle
+.vagrant
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+# windows thumbnail cache
+Thumbs.db
+# Mac DS_Store Files
+.DS_Store
+/node_modules
+.htpasswd
+
+*.log
+*.retry
+docker-compose.override.yml
+.env
