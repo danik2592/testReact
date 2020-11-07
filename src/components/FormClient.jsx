@@ -110,13 +110,13 @@ class FormClient extends React.Component {
                 justify='flex-start'
                 alignItems='flex-start'
               >
-                <Grid item xs={6} md={6}>
-                  <Grid container xs={12} md={12}>
+                <Grid container item md={6} sm={12}>
+                  <Grid container md={12} sm={12}>
                     <Typography className={classes.typography} component='h1' variant='h5'>
                       Основная информация
                     </Typography>
                   </Grid>
-                  <Grid className={classes.grid} container xs={12} md={12}>
+                  <Grid className={classes.grid} container xs={12} md={12} sm={12}>
                     <TextField
                       // error={!isEmpty(errorEmail)}
                       // helperText={errorEmail}
@@ -139,7 +139,7 @@ class FormClient extends React.Component {
                     justify='space-between'
                     alignItems='center'
                   >
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} md={6} sm={12}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -155,7 +155,7 @@ class FormClient extends React.Component {
                         onChange={e => this.handleChangeInput(e, 'shortname')}
                       />
                     </Grid>
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} md={6} sm={12}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -178,7 +178,7 @@ class FormClient extends React.Component {
                     justify='space-between'
                     alignItems='center'
                   >
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -194,7 +194,7 @@ class FormClient extends React.Component {
                         onChange={e => this.handleChangeInput(e, 'region')}
                       />
                     </Grid>
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -217,7 +217,7 @@ class FormClient extends React.Component {
                     justify='space-between'
                     alignItems='center'
                   >
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -233,7 +233,7 @@ class FormClient extends React.Component {
                         onChange={e => this.handleChangeInput(e, 'email')}
                       />
                     </Grid>
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -255,7 +255,7 @@ class FormClient extends React.Component {
                       justify='space-between'
                       alignItems='center'
                     >
-                      <Grid className={classes.grid} item xs={12} md={12}>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={12}>
                         <TextField
                           // error={!isEmpty(errorEmail)}
                           // helperText={errorEmail}
@@ -277,13 +277,13 @@ class FormClient extends React.Component {
                   </Grid>
                 </Grid>
 
-                <Grid item xs={6} md={6}>
+                <Grid item xs={12} sm={12} md={6}>
                   <Grid container xs={12} md={12}>
                     <Typography className={classes.typography} component='h1' variant='h5'>
                       Реквизиты компании
                     </Typography>
                   </Grid>
-                  <Grid className={classes.grid} container xs={12} md={12}>
+                  <Grid className={classes.grid} container xs={12} sm={12} md={12}>
                     <TextField
                       // error={!isEmpty(errorEmail)}
                       // helperText={errorEmail}
@@ -305,7 +305,7 @@ class FormClient extends React.Component {
                     justify='space-between'
                     alignItems='center'
                   >
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -321,7 +321,7 @@ class FormClient extends React.Component {
                         onChange={e => this.handleChangeInput(e, 'registered_type')}
                       />
                     </Grid>
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -344,7 +344,7 @@ class FormClient extends React.Component {
                     justify='space-between'
                     alignItems='center'
                   >
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -360,7 +360,7 @@ class FormClient extends React.Component {
                         onChange={e => this.handleChangeInput(e, 'leader')}
                       />
                     </Grid>
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -383,7 +383,7 @@ class FormClient extends React.Component {
                     justify='space-between'
                     alignItems='center'
                   >
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -399,7 +399,7 @@ class FormClient extends React.Component {
                         onChange={e => this.handleChangeInput(e, 'registered_address')}
                       />
                     </Grid>
-                    <Grid className={classes.grid} item xs={6} md={6}>
+                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                       <TextField
                         // error={!isEmpty(errorEmail)}
                         // helperText={errorEmail}
@@ -421,7 +421,7 @@ class FormClient extends React.Component {
                       justify='space-between'
                       alignItems='center'
                     >
-                      <Grid className={classes.grid} item xs={12} md={12}>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={12}>
                         <FormControlLabel
                           className={classes.switch}
                           checked={is_owner}
@@ -435,7 +435,7 @@ class FormClient extends React.Component {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={12} md={12} >
+                <Grid item xs={12} sm={12} md={12} >
                   <Grid container direction='row' justify='flex-end' alignItems='flex-end'>
                     <Button onClick={this.handleSumbitForm} variant='contained' color='primary' >
                       Сохранить

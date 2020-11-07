@@ -75,7 +75,7 @@ class Auth extends React.Component {
     return (
       <Fragment>
         <Grid container direction='row' justify='center' alignItems='center' spacing={3}>
-          <Grid item xs={4} md={4} >
+          <Grid container item xs={12} md={4} sm={12} >
             <Grid container direction='row' justify='center' alignItems='center' spacing={3}>
               <Paper className={classes.paper} elevation={3}>
                 <Grid
@@ -84,6 +84,7 @@ class Auth extends React.Component {
                   // justify='flex-start'
                   // alignItems='center'
                   xs={12}
+                  sm={12}
                   md={12}
                 >
                   <Typography className={classes.typography} component='h1' variant='h5'>
@@ -95,6 +96,9 @@ class Auth extends React.Component {
                   direction='row'
                   justify='flex-end'
                   alignItems='center'
+                  xs={12}
+                  sm={12}
+                  md={12}
                 >
                   <TextField
                     error={!isEmpty(errorEmail)}
@@ -113,6 +117,9 @@ class Auth extends React.Component {
                   direction='row'
                   justify='flex-end'
                   alignItems='center'
+                  xs={12}
+                  sm={12}
+                  md={12}
                 >
                   <TextField
                     error={!isEmpty(errorPassword)}
@@ -144,6 +151,9 @@ class Auth extends React.Component {
                   direction='row'
                   justify='flex-end'
                   alignItems='center'
+                  xs={12}
+                  sm={12}
+                  md={12}
                 >
                   <Button onClick={this.handleOnClickBtn} className={classes.btn} variant='contained' color='primary' disableElevation>
                     Войти

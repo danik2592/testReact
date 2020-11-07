@@ -168,7 +168,7 @@ class Clients extends React.Component {
               justify='space-between'
               alignItems='center'
             >
-              <Grid className={classes.grid} container xs={6} md={6}>
+              <Grid className={classes.grid} container xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(nameError)}
                   helperText={nameError}
@@ -184,7 +184,7 @@ class Clients extends React.Component {
                   onChange={e => this.handleChangeInput(e, 'name')}
                 />
               </Grid>
-              <Grid className={classes.grid} container xs={6} md={6}>
+              <Grid className={classes.grid} container xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(shortNameError)}
                   helperText={shortNameError}
@@ -207,7 +207,7 @@ class Clients extends React.Component {
               justify='space-between'
               alignItems='center'
             >
-              <Grid className={classes.grid} item xs={6} md={6}>
+              <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(typeError)}
                   helperText={typeError}
@@ -223,7 +223,7 @@ class Clients extends React.Component {
                   onChange={e => this.handleChangeInput(e, 'registered_type')}
                 />
               </Grid>
-              <Grid className={classes.grid} item xs={6} md={6}>
+              <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(workscopeError)}
                   helperText={workscopeError}
@@ -246,7 +246,7 @@ class Clients extends React.Component {
               justify='space-between'
               alignItems='center'
             >
-              <Grid className={classes.grid} item xs={6} md={6}>
+              <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(regionError)}
                   helperText={regionError}
@@ -262,7 +262,7 @@ class Clients extends React.Component {
                   onChange={e => this.handleChangeInput(e, 'region')}
                 />
               </Grid>
-              <Grid className={classes.grid} item xs={6} md={6}>
+              <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(cityError)}
                   helperText={cityError}
@@ -285,7 +285,7 @@ class Clients extends React.Component {
               justify='space-between'
               alignItems='center'
             >
-              <Grid className={classes.grid} item xs={6} md={6}>
+              <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(emailError)}
                   helperText={emailError}
@@ -301,7 +301,7 @@ class Clients extends React.Component {
                   onChange={e => this.handleChangeInput(e, 'email')}
                 />
               </Grid>
-              <Grid className={classes.grid} item xs={6} md={6}>
+              <Grid className={classes.grid} item xs={12} sm={12} md={6}>
                 <TextField
                   error={!isEmpty(phoneError)}
                   helperText={phoneError}
@@ -323,7 +323,7 @@ class Clients extends React.Component {
                 justify='space-between'
                 alignItems='center'
               >
-                <Grid className={classes.grid} item xs={12} md={12}>
+                <Grid className={classes.grid} item xs={12} sm={12} md={12}>
                   <TextField
                     className={classes.input}
                     required
@@ -344,11 +344,14 @@ class Clients extends React.Component {
                 container
                 direction='row'
                 justify='flex-end'
-                alignItems='center'
+                alignItems='flex-end'
+
               >
-                <Button className={classes.btn} variant='contained' color='primary' onClick={this.handleSumbitCompany} >
+                <Grid className={classes.gridBtn} item xs={12} sm={12} md={3}>
+                <Button fullWidth className={classes.btn} variant='contained' color='primary' onClick={this.handleSumbitCompany} >
                   Добавить
                 </Button>
+                </Grid>
               </Grid>
 
             </Grid>
@@ -385,7 +388,7 @@ class Clients extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar elevation={1} position='fixed' className={classes.appBar}>
+        <AppBar elevation={1} color={"default"} position='fixed' className={classes.appBar}>
           <Toolbar >
             <IconButton
               color='inherit'
@@ -483,7 +486,6 @@ const useStyles = theme => ({
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
-    background: '#FFFFFF',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -520,10 +522,14 @@ const useStyles = theme => ({
     paddingLeft: 15,
     paddingRight: 15,
   },
+  gridBtn: {
+    marginRight: theme.spacing(2),
+  },
   btn: {
-    marginTop: theme.spacing(3.5),
+    marginTop: theme.spacing(2.5),
     marginBottom: theme.spacing(3.5),
-    marginleft: theme.spacing(2),
+    // marginRight: theme.spacing(2),
+    // marginLeft: theme.spacing(2),
   },
   input: {
     marginTop: theme.spacing(3.5),

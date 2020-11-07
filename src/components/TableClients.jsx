@@ -154,67 +154,81 @@ class TableClients extends React.Component {
             className={classes.root}
           >
             <Grid className={classes.filterGrid} container direction='row' justify='space-between' alignItems='center' spacing={3}>
-              <TextField
-                className={classes.filterInput}
-                label='Наименование компании'
-                variant='outlined'
-                value={filterColName}
-                size='small'
-                id='mui-theme-provider-outlined-input'
-                InputProps={{ style: { fontSize: 12 } }}
-                InputLabelProps={{ style: { fontSize: 12 } }}
-                onChange={e => this.handleFilterTable(e, 'filterColName')}
-              />
-              <FormControl size='small' variant='outlined' className={classes.filterInput}>
-                <InputLabel className={classes.filterLabel} htmlFor='outlined-age-native-simple'>тип юр.лица</InputLabel>
-                <Select
+              <Grid container spacing={2} xs={11} md={11} >
+                <Grid container item xs={3} md={3}>
+                  <TextField
+                    className={classes.filterInput}
+                    label='Наименование компании'
+                    variant='outlined'
+                    value={filterColName}
+                    size='small'
+                    id='mui-theme-provider-outlined-input'
+                    InputProps={{ style: { fontSize: 12 } }}
+                    InputLabelProps={{ style: { fontSize: 12 } }}
+                    onChange={e => this.handleFilterTable(e, 'filterColName')}
+                  />
+                </Grid>
+                <Grid container item xs={3} md={3}>
+                <FormControl size='small' variant='outlined' className={classes.filterInput}>
+                  <InputLabel className={classes.filterLabel} htmlFor='outlined-age-native-simple'>тип юр.лица</InputLabel>
+                  <Select
+                    size='small'
+                    native
+                    value={filterColType}
+                    onChange={e => this.handleFilterTable(e, 'filterColType')}
+                    label='тип юр.лица'
+                    inputProps={{
+                      name: 'filterColType',
+                      style: { fontSize: 12 },
+                    }}
+                  >
+                    <option aria-label='' value='' />
+                    {types.map(type => (<option key={type} value={type}>{type}</option>))}
+                  </Select>
+                </FormControl>
+                </Grid>
+                <Grid container item xs={3} md={3}>
+                <FormControl size='small' variant='outlined' className={classes.filterInput}>
+                  <InputLabel className={classes.filterLabel} htmlFor='outlined-age-native-simple'>Регион</InputLabel>
+                  <Select
+                    size='small'
+                    native
+                    value={filterColRegion}
+                    onChange={e => this.handleFilterTable(e, 'filterColRegion')}
+                    label='Регион'
+                    inputProps={{
+                      name: 'filterColRegion',
+                      style: { fontSize: 12 },
+                    }}
+                  >
+                    <option aria-label='' value='' />
+                    {regions.map(item => (<option key={item} value={item}>{item}</option>))}
+                  </Select>
+                </FormControl>
+                </Grid>
+                <Grid container item xs={3} md={3}>
+                <TextField
+                  className={classes.filterInput}
+                  label='Город'
+                  variant='outlined'
                   size='small'
-                  native
-                  value={filterColType}
-                  onChange={e => this.handleFilterTable(e, 'filterColType')}
-                  label='тип юр.лица'
-                  inputProps={{
-                    name: 'filterColType',
-                    style: { fontSize: 12 },
-                  }}
-                >
-                  <option aria-label='' value='' />
-                  {types.map(type => (<option key={type} value={type}>{type}</option>))}
-                </Select>
-              </FormControl>
-              <FormControl size='small' variant='outlined' className={classes.filterInput}>
-                <InputLabel className={classes.filterLabel} htmlFor='outlined-age-native-simple'>Регион</InputLabel>
-                <Select
-                  size='small'
-                  native
-                  value={filterColRegion}
-                  onChange={e => this.handleFilterTable(e, 'filterColRegion')}
-                  label='Регион'
-                  inputProps={{
-                    name: 'filterColRegion',
-                    style: { fontSize: 12 },
-                  }}
-                >
-                  <option aria-label='' value='' />
-                  {regions.map(item => (<option key={item} value={item}>{item}</option>))}
-                </Select>
-              </FormControl>
-              <TextField
-                className={classes.filterInput}
-                label='Город'
-                variant='outlined'
-                size='small'
-                value={filterColCity}
-                onChange={e => this.handleFilterTable(e, 'filterColCity')}
-                InputProps={{ style: { fontSize: 12 } }}
-                InputLabelProps={{ style: { fontSize: 12 } }}
-                id='mui-theme-provider-outlined-input'
-              />
-              <Tooltip title='Обновить'>
-                <IconButton onClick={this.handleFilterRefresh} aria-label='Обновить'>
-                  <ReplayIcon />
-                </IconButton>
-              </Tooltip>
+                  value={filterColCity}
+                  onChange={e => this.handleFilterTable(e, 'filterColCity')}
+                  InputProps={{ style: { fontSize: 12 } }}
+                  InputLabelProps={{ style: { fontSize: 12 } }}
+                  id='mui-theme-provider-outlined-input'
+                />
+                </Grid>
+              </Grid>
+              <Grid container xs={1} md={1}>
+                <Grid item >
+                  <Tooltip title='Обновить'>
+                  <IconButton onClick={this.handleFilterRefresh} aria-label='Обновить'>
+                    <ReplayIcon />
+                  </IconButton>
+                </Tooltip>
+                </Grid>
+              </Grid>
             </Grid>
           </Toolbar>
           <TableContainer>
@@ -325,7 +339,7 @@ const useStyles = theme => ({
     flex: '1 1 100%',
   },
   filterInput: {
-    width: theme.spacing(26.375),
+    width: '100%',
     height: theme.spacing(4.5),
     fontSize: 12,
   },
