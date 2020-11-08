@@ -11,6 +11,9 @@ function mapStateToProps(state) {
     activeCompanyId: state.clients.activeCompanyId,
     activeCompany: state.clients.activeCompany,
     isLoadActiveCompany: state.clients.isLoadActiveCompany,
+    initialValues: {
+      ...state.clients.activeCompany,
+    },
   };
 }
 

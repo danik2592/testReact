@@ -24,9 +24,12 @@ import isEmpty from 'lodash/isEmpty';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import { Form, Field, reduxForm } from 'redux-form';
 import { LogoIcon } from '../constants/app-constants';
 import TableClients from '../containers/TableClients';
 import FormClient from '../containers/FormClient';
+import {isEmail, required} from "./validators";
+
 
 
 const drawerWidth = 250;
@@ -49,24 +52,6 @@ class Clients extends React.Component {
     this.state = {
       mobileOpen: false,
       showDialog: false,
-      name: '',
-      shortName: '',
-      registered_type: '',
-      workscope: '',
-      region: '',
-      city: '',
-      email: '',
-      phone: '',
-      addition: '',
-      isValidFormDialog: true,
-      nameError: '',
-      shortNameError: '',
-      typeError: '',
-      workscopeError: '',
-      regionError: '',
-      cityError: '',
-      emailError: '',
-      phoneError: '',
     };
   }
 
@@ -86,64 +71,8 @@ class Clients extends React.Component {
     }));
   };
 
-  validateForm = () => {
-    const {
-      name, shortName, registered_type, workscope, region, city, phone, email,
-    } = this.state;
-    this.setState({
-      nameError: '',
-      shortNameError: '',
-      typeError: '',
-      workscopeError: '',
-      regionError: '',
-      cityError: '',
-      emailError: '',
-      phoneError: '',
-      isValidFormDialog: true,
-    });
-    if (isEmpty(name)) {
-      this.setState({ nameError: 'Заполните поле «Наименование компании»', isValidFormDialog: false });
-    }
-    if (isEmpty(shortName)) {
-      this.setState({ shortNameError: 'Заполните поле «Короткое название»', isValidFormDialog: false });
-    }
-    if (isEmpty(registered_type)) {
-      this.setState({ typeError: 'Заполните поле «Тип юр. лица»', isValidFormDialog: false });
-    }
-    if (isEmpty(workscope)) {
-      this.setState({ workscopeError: 'Заполните поле «Сфера деятельности»', isValidFormDialog: false });
-    }
-    if (isEmpty(region)) {
-      this.setState({ regionError: 'Заполните поле «Регион»', isValidFormDialog: false });
-    }
-    if (isEmpty(city)) {
-      this.setState({ cityError: 'Заполните поле «Город»', isValidFormDialog: false });
-    }
-    if (isEmpty(phone)) {
-      this.setState({ phoneError: 'Заполните поле «Телефон»', isValidFormDialog: false });
-    }
-    if (isEmpty(email)) {
-      this.setState({ emailError: 'Заполните поле «Email»', isValidFormDialog: false });
-    }
-  };
-
-  handleSumbitCompany = () => {
-    const {
-      isValidFormDialog, name, shortName, registered_type, workscope, region, city, phone, addition,
-    } = this.state;
-    this.validateForm();
-    if (isValidFormDialog) {
-      this.setState({ showDialog: false });
-      this.props.addCompany({
-        name, shortName, registered_type, workscope, region, city, phone, addition,
-      });
-    }
-  };
   handleCloseDialog = () => {
     this.setState({ showDialog: false });
-  };
-  handleChangeInput = (e, name) => {
-    this.setState({ [name]: e.target.value });
   };
 
   handleCloseApp = () => {
@@ -152,15 +81,42 @@ class Clients extends React.Component {
   handleResetUpdate = () => {
     this.props.resetUpdate();
   }
+
+  renderTextField = ({
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+    <TextField
+      label={label}
+      placeholder={label}
+      variant='outlined'
+      fullWidth
+      error={touched && invalid}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  )
+
+  handleSubmit = (form) => {
+    if (this.props.valid) {
+      this.setState({ showDialog: false });
+      this.props.addCompany(form);
+    }
+  }
+
   renderDialog = () => {
     const {
-      showDialog, nameError, shortNameError, emailError, typeError, workscopeError, regionError, cityError, phoneError,
+      showDialog,
     } = this.state;
     const { classes } = this.props;
     return (
       <Dialog open={showDialog} onClose={this.handleCloseDialog} aria-labelledby='form-dialog-title'>
         <DialogTitle className={classes.dialogTitle} id='form-dialog-title'>Добавить клиента</DialogTitle>
         <DialogContent>
+          <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
           <Grid item xs={12} md={12}>
             <Grid
               container
@@ -169,35 +125,31 @@ class Clients extends React.Component {
               alignItems='center'
             >
               <Grid className={classes.grid} container xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(nameError)}
-                  helperText={nameError}
-                  className={classes.input}
-                  required
-                  id='name'
+                <Field
+                  name='name'
+                  component={this.renderTextField}
+                  type='text'
                   label='Наименование компании'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Наименование компании».')]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'name')}
                 />
               </Grid>
               <Grid className={classes.grid} container xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(shortNameError)}
-                  helperText={shortNameError}
-                  className={classes.input}
+                <Field
+                  name='shortname'
+                  component={this.renderTextField}
+                  type='text'
+                  label='Короткое завание'
+                  validate={[required('Необходимо заполнить «Короткое завание».')]}
                   required
-                  id='shortName'
-                  label='Короткое название'
-                  defaultValue=''
-                  variant='outlined'
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'shortName')}
                 />
               </Grid>
             </Grid>
@@ -208,35 +160,31 @@ class Clients extends React.Component {
               alignItems='center'
             >
               <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(typeError)}
-                  helperText={typeError}
-                  className={classes.input}
-                  required
-                  id='registered_type'
+                <Field
+                  name='registered_type'
+                  component={this.renderTextField}
+                  type='text'
                   label='Тип юр. лица'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Тип юр. лица».')]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'registered_type')}
                 />
               </Grid>
               <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(workscopeError)}
-                  helperText={workscopeError}
-                  className={classes.input}
-                  required
-                  id='workscope'
+                <Field
+                  name='workscope'
+                  component={this.renderTextField}
+                  type='text'
                   label='Сфера деятельности'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Сфера деятельности».')]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'workscope')}
                 />
               </Grid>
             </Grid>
@@ -247,35 +195,31 @@ class Clients extends React.Component {
               alignItems='center'
             >
               <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(regionError)}
-                  helperText={regionError}
-                  className={classes.input}
-                  required
-                  id='region'
+                <Field
+                  name='region'
+                  component={this.renderTextField}
+                  type='text'
                   label='Регион'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Регион».')]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'region')}
                 />
               </Grid>
               <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(cityError)}
-                  helperText={cityError}
-                  className={classes.input}
-                  required
-                  id='city'
+                <Field
+                  name='city'
+                  component={this.renderTextField}
+                  type='text'
                   label='Город'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Город».')]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'city')}
                 />
               </Grid>
             </Grid>
@@ -286,35 +230,31 @@ class Clients extends React.Component {
               alignItems='center'
             >
               <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(emailError)}
-                  helperText={emailError}
-                  className={classes.input}
-                  required
-                  id='email'
+                <Field
+                  name='email'
+                  component={this.renderTextField}
+                  type='text'
                   label='Email'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Email».'), isEmail]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'email')}
                 />
               </Grid>
               <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                <TextField
-                  error={!isEmpty(phoneError)}
-                  helperText={phoneError}
-                  className={classes.input}
-                  required
-                  id='phone'
+                <Field
+                  name='phone'
+                  component={this.renderTextField}
+                  type='text'
                   label='Телефон'
-                  defaultValue=''
-                  variant='outlined'
+                  validate={[required('Необходимо заполнить «Телефон».')]}
+                  required
+                  className={classes.input}
                   size='small'
                   InputProps={{ style: { fontSize: 12 } }}
                   InputLabelProps={{ style: { fontSize: 12 } }}
-                  onChange={e => this.handleChangeInput(e, 'phone')}
                 />
               </Grid>
               <Grid
@@ -324,19 +264,17 @@ class Clients extends React.Component {
                 alignItems='center'
               >
                 <Grid className={classes.grid} item xs={12} sm={12} md={12}>
-                  <TextField
-                    className={classes.input}
-                    required
-                    id='addition'
+                  <Field
+                    name='description'
+                    component={this.renderTextField}
+                    type='text'
                     label='Дополнительно(описание)'
-                    defaultValue=''
-                    variant='outlined'
+                    className={classes.input}
                     size='small'
                     multiline
                     rows={4}
                     InputProps={{ style: { fontSize: 12 } }}
                     InputLabelProps={{ style: { fontSize: 12 } }}
-                    onChange={e => this.handleChangeInput(e, 'addition')}
                   />
                 </Grid>
               </Grid>
@@ -348,21 +286,24 @@ class Clients extends React.Component {
 
               >
                 <Grid className={classes.gridBtn} item xs={12} sm={12} md={3}>
-                <Button fullWidth className={classes.btn} variant='contained' color='primary' onClick={this.handleSumbitCompany} >
-                  Добавить
-                </Button>
+                  <Button type='submit' fullWidth className={classes.btn} variant='contained' color='primary' >
+                    Добавить
+                  </Button>
                 </Grid>
               </Grid>
 
             </Grid>
           </Grid>
+          </Form>
         </DialogContent>
       </Dialog>
     );
   };
 
   render() {
-    const { classes, activeCompanyId, activeCompany, theme } = this.props;
+    const {
+      classes, activeCompanyId, activeCompany, theme,
+    } = this.props;
     const { mobileOpen } = this.state;
 
     const drawer = (
@@ -388,7 +329,7 @@ class Clients extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar elevation={1} color={"default"} position='fixed' className={classes.appBar}>
+        <AppBar elevation={1} color='default' position='fixed' className={classes.appBar}>
           <Toolbar >
             <IconButton
               color='inherit'
@@ -536,4 +477,8 @@ const useStyles = theme => ({
     width: '100%',
   },
 });
-export default withTheme(withStyles(useStyles)(Clients));
+export default reduxForm({
+  form: 'newClient',
+  destroyOnUnmount: false,
+  // validate: () => {},
+})(withTheme(withStyles(useStyles)(Clients)));

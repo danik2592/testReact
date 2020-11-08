@@ -5,8 +5,7 @@ import Auth from '../components/Auth';
 
 function mapStateToProps(state) {
   return {
-    errorEmail: state.auth.errorEmail,
-    errorPassword: state.auth.errorPassword,
+    msgError: state.auth.msgError,
     isValid: state.auth.isValid,
   };
 }

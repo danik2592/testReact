@@ -56,24 +56,8 @@ export const updateCompany = ({ activeCompany }) => {
   });
 };
 export const addCompany = ({ form }) => {
-  const { name, region, city, phone, email, shortName, registered_type, workscope, addition } = form;
   const token = sessionStorage.getItem('accessToken');
-  return axios.post('http://194.67.90.67/api/v1/companies/', {
-    city,
-    is_client: true,
-    is_contractor: false,
-    is_owner: false,
-    is_partner: false,
-    is_provider: false,
-    name,
-    region,
-    phone,
-    email,
-    description: addition,
-    shortname: shortName,
-    registered_type,
-    workscope,
-  },{
+  return axios.post('http://194.67.90.67/api/v1/companies/', form,{
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

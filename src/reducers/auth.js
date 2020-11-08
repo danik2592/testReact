@@ -5,9 +5,8 @@ import * as actions from '../actions';
 
 const defaultState = {
   isAuth: false,
-  errorEmail: '',
-  errorPassword: '',
   isValid: true,
+  msgError: '',
 };
 
 export default handleActions({
@@ -15,19 +14,13 @@ export default handleActions({
     const { refresh, access } = auth;
     sessionStorage.setItem('accessToken', access);
     sessionStorage.setItem('refreshToken', refresh);
-    return { ...state, isValid: true, errorEmail: '', errorPassword: '', isAuth: true };
+    return { ...state, isValid: true, msgError: '', isAuth: true };
   },
   [actions.authUserFailed](state) {
-    return { ...state, errorEmail: 'Неверный email или пароль', isValid: false };
-  },
-  [actions.setPasswordErrorText](state, { payload: { msg, isValid } }) {
-    return { ...state, errorPassword: msg, isValid };
-  },
-  [actions.setEmailErrorText](state, { payload: { msg, isValid } }) {
-    return { ...state, errorEmail: msg, isValid };
+    return { ...state, msgError: 'Неверный email или пароль', isValid: false };
   },
   [actions.resetErrorAuth](state) {
-    return { ...state, errorEmail: '', errorPassword: '', isValid: true };
+    return { ...state, msgError: '', isValid: true };
   },
   [actions.checkAuthTokenSucceded](state, { auth }) {
     const { refresh, access } = auth;

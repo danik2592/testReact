@@ -8,6 +8,9 @@ function mapStateToProps(state) {
     isAuth: state.auth.isAuth,
     activeCompanyId: state.clients.activeCompanyId,
     activeCompany: state.clients.activeCompany,
+    initialValues: {
+      ...state.clients.activeCompany,
+    },
   };
 }
 

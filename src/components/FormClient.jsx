@@ -13,9 +13,10 @@ import {
   FormControlLabel,
   TextField,
 } from '@material-ui/core';
-import isEmpty from 'lodash/isEmpty';
+import { Form, Field, reduxForm } from 'redux-form';
 import './style.less';
 import TableBankDetail from '../containers/TableBankDetail';
+import { isEmail, required } from './validators';
 
 class TabPanel extends React.Component {
   render() {
@@ -61,19 +62,8 @@ class FormClient extends React.Component {
     this.props.getCompanyDetail(this.props.activeCompanyId);
   }
 
-  handleChangeInput = (e, name) => {
-    const { activeCompany, updateActiveCompany } = this.props;
-    const newCompany = { ...activeCompany, [name]: e.target.value };
-    updateActiveCompany(newCompany);
-  };
-
   handleChangeTab= (event, newValue) => {
     this.setState({ tabValue: newValue });
-  };
-
-  handleSumbitForm = () => {
-    this.props.updateCompany(this.props.activeCompany);
-    this.props.resetUpdate();
   };
 
   handleChangeSwitch = (e) => {
@@ -82,171 +72,91 @@ class FormClient extends React.Component {
     updateActiveCompany(newCompany);
   };
 
+  handleSubmit = (form) => {
+    if (this.props.valid) {
+      this.props.updateCompany(form);
+      this.props.resetUpdate();
+    }
+  }
+
+  renderTextField = ({
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+    <TextField
+      label={label}
+      placeholder={label}
+      variant='outlined'
+      fullWidth
+      error={touched && invalid}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  );
+
+  renderSwitchField = ({
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+    <FormControlLabel
+      control={<Switch color='primary' />}
+      label={label}
+      labelPlacement='start'
+      {...input}
+      {...custom}
+    />
+  );
+
+
   render() {
     const { classes, activeCompany } = this.props;
     const { tabValue } = this.state;
-    const {
-      name, shortname, city, region, workscope, email, phone, description, registered_name,
-      registered_type, bin_iin, address, leader, leader_position, registered_address, is_owner,
-    } = activeCompany;
+    const { is_owner } = activeCompany;
     return (
-      <Grid container direction='row' justify='center' alignItems='center' spacing={3}>
-        <Grid item xs={12} md={12}>
-          <Paper className={classes.root}>
-            <Tabs
-              className={classes.tabs}
-              value={tabValue}
-              onChange={this.handleChangeTab}
-              indicatorColor='primary'
-              textColor='primary'
-            >
-              <Tab className={classes.tab} label='ИНФОРМАЦИЯ' />
-              <Tab label='БАНКОВСКИЕ РЕКВИЗИТЫ' />
-            </Tabs>
-            <TabPanel value={tabValue} index={0}>
-              <Grid
-                container
-                direction='row'
-                justify='flex-start'
-                alignItems='flex-start'
+      <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+        <Grid container direction='row' justify='center' alignItems='center' spacing={3}>
+          <Grid item xs={12} md={12}>
+            <Paper className={classes.root}>
+              <Tabs
+                className={classes.tabs}
+                value={tabValue}
+                onChange={this.handleChangeTab}
+                indicatorColor='primary'
+                textColor='primary'
               >
-                <Grid container item md={6} sm={12}>
-                  <Grid container md={12} sm={12}>
-                    <Typography className={classes.typography} component='h1' variant='h5'>
-                      Основная информация
-                    </Typography>
-                  </Grid>
-                  <Grid className={classes.grid} container xs={12} md={12} sm={12}>
-                    <TextField
-                      // error={!isEmpty(errorEmail)}
-                      // helperText={errorEmail}
-                      className={classes.input}
-                      required
-                      id='name'
-                      label='Наименование компании'
-                      value={name}
-                      defaultValue={name}
-                      variant='outlined'
-                      size='small'
-                      InputProps={{ style: { fontSize: 12 } }}
-                      InputLabelProps={{ style: { fontSize: 12 } }}
-                      onChange={e => this.handleChangeInput(e, 'name')}
-                    />
-                  </Grid>
-                  <Grid
-                    container
-                    direction='row'
-                    justify='space-between'
-                    alignItems='center'
-                  >
-                    <Grid className={classes.grid} item xs={12} md={6} sm={12}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='shortname'
-                        label='Короткое завание'
-                        value={shortname}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'shortname')}
-                      />
+                <Tab className={classes.tab} label='ИНФОРМАЦИЯ' />
+                <Tab label='БАНКОВСКИЕ РЕКВИЗИТЫ' />
+              </Tabs>
+              <TabPanel value={tabValue} index={0}>
+                <Grid
+                  container
+                  direction='row'
+                  justify='flex-start'
+                  alignItems='flex-start'
+                >
+                  <Grid container item md={6} sm={12}>
+                    <Grid container md={12} sm={12}>
+                      <Typography className={classes.typography} component='h1' variant='h5'>
+                        Основная информация
+                      </Typography>
                     </Grid>
-                    <Grid className={classes.grid} item xs={12} md={6} sm={12}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
+                    <Grid className={classes.grid} container xs={12} md={12} sm={12}>
+                      <Field
+                        name='name'
+                        component={this.renderTextField}
+                        type='text'
+                        label='Наименование компании'
+                        validate={[required('Необходимо заполнить «Наименование компании».')]}
                         required
-                        id='workscope'
-                        label='Сфера деятельности'
-                        value={workscope}
-                        variant='outlined'
+                        className={classes.input}
                         size='small'
                         InputProps={{ style: { fontSize: 12 } }}
                         InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'workscope')}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    direction='row'
-                    justify='space-between'
-                    alignItems='center'
-                  >
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='region'
-                        label='Регион'
-                        value={region}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'region')}
-                      />
-                    </Grid>
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='city'
-                        label='Город'
-                        value={city}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'city')}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    direction='row'
-                    justify='space-between'
-                    alignItems='center'
-                  >
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='email'
-                        label='Email'
-                        value={email}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'email')}
-                      />
-                    </Grid>
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='phone'
-                        label='Телефон'
-                        value={phone}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'phone')}
                       />
                     </Grid>
                     <Grid
@@ -255,164 +165,146 @@ class FormClient extends React.Component {
                       justify='space-between'
                       alignItems='center'
                     >
-                      <Grid className={classes.grid} item xs={12} sm={12} md={12}>
-                        <TextField
-                          // error={!isEmpty(errorEmail)}
-                          // helperText={errorEmail}
-                          className={classes.input}
+                      <Grid className={classes.grid} item xs={12} md={6} sm={12}>
+                        <Field
+                          name='shortname'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Короткое завание'
+                          validate={[required('Необходимо заполнить «Короткое завание».')]}
                           required
-                          id='description'
-                          label='Дополнительно(описание)'
-                          value={description}
-                          variant='outlined'
+                          className={classes.input}
                           size='small'
-                          multiline
-                          rows={4}
                           InputProps={{ style: { fontSize: 12 } }}
                           InputLabelProps={{ style: { fontSize: 12 } }}
-                          onChange={e => this.handleChangeInput(e, 'description')}
+                        />
+                      </Grid>
+                      <Grid className={classes.grid} item xs={12} md={6} sm={12}>
+                        <Field
+                          name='workscope'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Сфера деятельности'
+                          validate={[required('Необходимо заполнить «Сфера деятельности».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
                         />
                       </Grid>
                     </Grid>
+                    <Grid
+                      container
+                      direction='row'
+                      justify='space-between'
+                      alignItems='center'
+                    >
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='region'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Регион'
+                          validate={[required('Необходимо заполнить «Регион».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='city'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Город'
+                          validate={[required('Необходимо заполнить «Город».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      direction='row'
+                      justify='space-between'
+                      alignItems='center'
+                    >
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='email'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Email'
+                          validate={[required('Необходимо заполнить «Email».'), isEmail]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='phone'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Телефон'
+                          validate={[required('Необходимо заполнить «Телефон».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid
+                        container
+                        direction='row'
+                        justify='space-between'
+                        alignItems='center'
+                      >
+                        <Grid className={classes.grid} item xs={12} sm={12} md={12}>
+                          <Field
+                            name='description'
+                            component={this.renderTextField}
+                            type='text'
+                            label='Дополнительно(описание)'
+                            className={classes.input}
+                            size='small'
+                            multiline
+                            rows={4}
+                            InputProps={{ style: { fontSize: 12 } }}
+                            InputLabelProps={{ style: { fontSize: 12 } }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid item xs={12} sm={12} md={6}>
-                  <Grid container xs={12} md={12}>
-                    <Typography className={classes.typography} component='h1' variant='h5'>
-                      Реквизиты компании
-                    </Typography>
-                  </Grid>
-                  <Grid className={classes.grid} container xs={12} sm={12} md={12}>
-                    <TextField
-                      // error={!isEmpty(errorEmail)}
-                      // helperText={errorEmail}
-                      className={classes.input}
-                      required
-                      id='registered_name'
-                      label='Наименование юр. лица'
-                      value={registered_name}
-                      variant='outlined'
-                      size='small'
-                      InputProps={{ style: { fontSize: 12 } }}
-                      InputLabelProps={{ style: { fontSize: 12 } }}
-                      onChange={e => this.handleChangeInput(e, 'registered_name')}
-                    />
-                  </Grid>
-                  <Grid
-                    container
-                    direction='row'
-                    justify='space-between'
-                    alignItems='center'
-                  >
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='registered_type'
-                        label='Тип юр. лица'
-                        value={registered_type}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'registered_type')}
-                      />
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Grid container xs={12} md={12}>
+                      <Typography className={classes.typography} component='h1' variant='h5'>
+                        Реквизиты компании
+                      </Typography>
                     </Grid>
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
+                    <Grid className={classes.grid} container xs={12} sm={12} md={12}>
+                      <Field
+                        name='registered_name'
+                        component={this.renderTextField}
+                        type='text'
+                        label='Наименование юр. лица'
+                        validate={[required('Необходимо заполнить «Наименование юр. лица».')]}
                         required
-                        id='bin_iin'
-                        label='БИН/ИИН'
-                        value={bin_iin}
-                        variant='outlined'
+                        className={classes.input}
                         size='small'
                         InputProps={{ style: { fontSize: 12 } }}
                         InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'bin_iin')}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    direction='row'
-                    justify='space-between'
-                    alignItems='center'
-                  >
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='leader'
-                        label='Руководитель'
-                        value={leader}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'leader')}
-                      />
-                    </Grid>
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='leader_position'
-                        label='Должность руководителя'
-                        value={leader_position}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'leader_position')}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    direction='row'
-                    justify='space-between'
-                    alignItems='center'
-                  >
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='registered_address'
-                        label='Юридический адрес'
-                        value={registered_address}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'registered_address')}
-                      />
-                    </Grid>
-                    <Grid className={classes.grid} item xs={12} sm={12} md={6}>
-                      <TextField
-                        // error={!isEmpty(errorEmail)}
-                        // helperText={errorEmail}
-                        className={classes.input}
-                        required
-                        id='address'
-                        label='Физический адрес'
-                        value={address}
-                        variant='outlined'
-                        size='small'
-                        InputProps={{ style: { fontSize: 12 } }}
-                        InputLabelProps={{ style: { fontSize: 12 } }}
-                        onChange={e => this.handleChangeInput(e, 'address')}
                       />
                     </Grid>
                     <Grid
@@ -421,35 +313,143 @@ class FormClient extends React.Component {
                       justify='space-between'
                       alignItems='center'
                     >
-                      <Grid className={classes.grid} item xs={12} sm={12} md={12}>
-                        <FormControlLabel
-                          className={classes.switch}
-                          checked={is_owner}
-                          value={is_owner}
-                          onChange={this.handleChangeSwitch}
-                          control={<Switch color='primary' />}
-                          label='Платильщик НДС(нет/да)'
-                          labelPlacement='start'
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='registered_type'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Тип юр. лица'
+                          validate={[required('Необходимо заполнить «Тип юр. лица».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='bin_iin'
+                          component={this.renderTextField}
+                          type='text'
+                          label='БИН/ИИН'
+                          validate={[required('Необходимо заполнить «БИН/ИИН».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
                         />
                       </Grid>
                     </Grid>
+                    <Grid
+                      container
+                      direction='row'
+                      justify='space-between'
+                      alignItems='center'
+                    >
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='leader'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Руководитель'
+                          validate={[required('Необходимо заполнить «Руководитель».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='leader_position'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Должность руководителя'
+                          validate={[required('Необходимо заполнить «Должность руководителя».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      direction='row'
+                      justify='space-between'
+                      alignItems='center'
+                    >
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='registered_address'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Юридический адрес'
+                          validate={[required('Необходимо заполнить «Юридический адрес».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid className={classes.grid} item xs={12} sm={12} md={6}>
+                        <Field
+                          name='address'
+                          component={this.renderTextField}
+                          type='text'
+                          label='Физический адрес'
+                          validate={[required('Необходимо заполнить «Физический адрес».')]}
+                          required
+                          className={classes.input}
+                          size='small'
+                          InputProps={{ style: { fontSize: 12 } }}
+                          InputLabelProps={{ style: { fontSize: 12 } }}
+                        />
+                      </Grid>
+                      <Grid
+                        container
+                        direction='row'
+                        justify='space-between'
+                        alignItems='center'
+                      >
+                        <Grid className={classes.grid} item xs={12} sm={12} md={12}>
+                          <Field
+                            name='is_owner'
+                            component={this.renderSwitchField}
+                            type='text'
+                            label='Платильщик НДС(нет/да)'
+                            required
+                            labelPlacement='start'
+                            className={classes.switch}
+                            checked={is_owner}
+                            value={is_owner}
+                            onChange={this.handleChangeSwitch}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} >
+                    <Grid container direction='row' justify='flex-end' alignItems='flex-end'>
+                      <Button type='submit' variant='contained' color='primary' >
+                        Сохранить
+                      </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} >
-                  <Grid container direction='row' justify='flex-end' alignItems='flex-end'>
-                    <Button onClick={this.handleSumbitForm} variant='contained' color='primary' >
-                      Сохранить
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-              <TableBankDetail />
-            </TabPanel>
-          </Paper>
+              </TabPanel>
+              <TabPanel value={tabValue} index={1}>
+                <TableBankDetail />
+              </TabPanel>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      </Form>
     );
   }
 }
@@ -494,4 +494,9 @@ const useStyles = theme => ({
     height: theme.spacing(4.5),
   },
 });
-export default withTheme(withStyles(useStyles)(FormClient));
+export default reduxForm({
+  form: 'client',
+  destroyOnUnmount: false,
+  enableReinitialize: true,
+  // validate: () => {},
+})(withTheme(withStyles(useStyles)(FormClient)));
